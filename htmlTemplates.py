@@ -6,215 +6,218 @@ css = """
     font-family: 'Poppins', sans-serif;
 }
 
-/* Main app background - RGB animation */
+/* Main app background - RGB gradient animation */
 .stApp {
-    background: linear-gradient(-45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
-    background-size: 1000% 1000%;
-    animation: rgbBackground 30s ease infinite;
+    background: linear-gradient(-45deg, #ff0000, #00ff00, #0000ff, #ffff00, #ff00ff, #00ffff);
+    background-size: 400% 400%;
+    animation: rgbWave 20s ease infinite;
     background-attachment: fixed;
 }
 
-@keyframes rgbBackground {
+@keyframes rgbWave {
     0% {
         background-position: 0% 50%;
+        background: linear-gradient(-45deg, #ff0000, #00ff00, #0000ff, #ffff00);
+    }
+    25% {
+        background-position: 50% 100%;
+        background: linear-gradient(-45deg, #00ff00, #0000ff, #ffff00, #ff00ff);
     }
     50% {
         background-position: 100% 50%;
+        background: linear-gradient(-45deg, #0000ff, #ffff00, #ff00ff, #00ffff);
+    }
+    75% {
+        background-position: 50% 0%;
+        background: linear-gradient(-45deg, #ffff00, #ff00ff, #00ffff, #ff0000);
     }
     100% {
         background-position: 0% 50%;
+        background: linear-gradient(-45deg, #ff00ff, #00ffff, #ff0000, #00ff00);
     }
 }
 
-/* Sidebar with different RGB gradient */
-.stSidebar {
-    background: linear-gradient(-45deg, #00ffaa, #00aaff, #aa00ff, #ff00aa);
-    background-size: 400% 400%;
-    animation: sidebarGradient 15s ease infinite;
-    border-radius: 15px;
-    padding: 20px;
-    margin: 10px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-@keyframes sidebarGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* Header styles */
+/* Headers with different RGB effects */
 .main-header {
-    color: white;
+    background: linear-gradient(135deg, #ff0000, #ff8000, #ffff00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-align: center;
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 2.8rem;
+    font-weight: 800;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.3);
-    padding: 15px;
-    border-radius: 15px;
-    backdrop-filter: blur(5px);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    animation: headerGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes headerGlow {
+    from {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+    to {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 30px rgba(0, 255, 0, 0.5), 0 0 40px rgba(0, 0, 255, 0.3);
+    }
 }
 
 .sub-header {
-    color: white;
+    background: linear-gradient(135deg, #00ff00, #00ffff, #0000ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-align: center;
-    font-size: 1.5rem;
-    font-weight: 400;
+    font-size: 1.8rem;
+    font-weight: 600;
     margin-bottom: 2rem;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    border-radius: 10px;
-    backdrop-filter: blur(5px);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-/* Button styles */
+/* Sidebar with unique RGB gradient */
+.stSidebar {
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.9), rgba(0, 255, 0, 0.9), rgba(0, 0, 255, 0.9)) !important;
+    border-radius: 20px;
+    padding: 25px;
+    margin: 15px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: sidebarPulse 8s ease-in-out infinite;
+}
+
+@keyframes sidebarPulse {
+    0% { background: linear-gradient(135deg, rgba(255, 0, 0, 0.9), rgba(0, 255, 0, 0.9)); }
+    33% { background: linear-gradient(135deg, rgba(0, 255, 0, 0.9), rgba(0, 0, 255, 0.9)); }
+    66% { background: linear-gradient(135deg, rgba(0, 0, 255, 0.9), rgba(255, 0, 255, 0.9)); }
+    100% { background: linear-gradient(135deg, rgba(255, 0, 255, 0.9), rgba(255, 0, 0, 0.9)); }
+}
+
+/* Button with RGB animation */
 .stButton button {
-    background: linear-gradient(-45deg, #ff0000, #00ff00, #0000ff);
+    background: linear-gradient(-45deg, #ff0000, #00ff00, #0000ff, #ff00ff);
     background-size: 400% 400%;
-    animation: buttonGradient 10s ease infinite;
+    animation: buttonRGB 6s ease infinite;
     color: white;
     border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-weight: 600;
+    border-radius: 12px;
+    padding: 15px 30px;
+    font-weight: 700;
     width: 100%;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-@keyframes buttonGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+@keyframes buttonRGB {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .stButton button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    animation: buttonRGB 3s ease infinite;
 }
 
-/* Input field styles */
+/* Input field with RGB border */
 .stTextInput input {
-    border-radius: 10px;
-    padding: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 15px;
+    border: 3px solid;
+    border-image: linear-gradient(45deg, #ff0000, #00ff00, #0000ff) 1;
+    background: rgba(255, 255, 255, 0.95);
     transition: all 0.3s ease;
+    font-size: 1rem;
 }
 
 .stTextInput input:focus {
-    border-color: #00ffff;
-    box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.3);
+    border-image: linear-gradient(45deg, #ff00ff, #ffff00, #00ffff) 1;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
     background: rgba(255, 255, 255, 1);
 }
 
-/* Chat container */
+/* Chat container with RGB gradient */
 .chat-container {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, rgba(255, 0, 255, 0.9), rgba(0, 255, 255, 0.9), rgba(255, 255, 0, 0.9));
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: chatGlow 10s ease-in-out infinite;
 }
 
-/* Message styles */
+@keyframes chatGlow {
+    0% { box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3); }
+    33% { box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3); }
+    66% { box-shadow: 0 10px 30px rgba(0, 0, 255, 0.3); }
+    100% { box-shadow: 0 10px 30px rgba(255, 0, 255, 0.3); }
+}
+
+/* User message with RGB gradient */
 .user-message {
-    background: linear-gradient(-45deg, #ff0080, #8000ff, #0080ff);
-    background-size: 400% 400%;
-    animation: userMessage 8s ease infinite;
+    background: linear-gradient(135deg, #ff0000, #ff8000, #ffff00);
     color: white;
-    border-radius: 18px 18px 0 18px;
-    padding: 15px;
-    margin: 12px 0;
+    border-radius: 20px 20px 0 20px;
+    padding: 18px;
+    margin: 15px 0;
     max-width: 80%;
     margin-left: auto;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+    animation: messageSlide 0.5s ease-out;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-@keyframes userMessage {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
+/* Bot message with different RGB gradient */
 .bot-message {
-    background: linear-gradient(-45deg, #00ffaa, #00aaff, #aa00ff);
-    background-size: 400% 400%;
-    animation: botMessage 8s ease infinite;
+    background: linear-gradient(135deg, #0000ff, #8000ff, #ff00ff);
     color: white;
-    border-radius: 18px 18px 18px 0;
-    padding: 15px;
-    margin: 12px 0;
+    border-radius: 20px 20px 20px 0;
+    padding: 18px;
+    margin: 15px 0;
     max-width: 80%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 255, 0.3);
+    animation: messageSlide 0.5s ease-out;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-@keyframes botMessage {
-    0% {
-        background-position: 0% 50%;
+@keyframes messageSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* Footer */
+/* Footer with RGB text */
 .footer {
-    color: white;
+    background: linear-gradient(135deg, #ff0000, #00ff00, #0000ff, #ff00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-align: center;
-    margin-top: 2rem;
-    font-size: 0.9rem;
+    margin-top: 3rem;
+    font-size: 1.1rem;
+    font-weight: 600;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    border-radius: 10px;
-    backdrop-filter: blur(5px);
+    animation: footerRGB 8s ease-in-out infinite;
 }
 
-/* Animation for the header */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes footerRGB {
+    0% { background: linear-gradient(135deg, #ff0000, #00ff00); }
+    33% { background: linear-gradient(135deg, #00ff00, #0000ff); }
+    66% { background: linear-gradient(135deg, #0000ff, #ff00ff); }
+    100% { background: linear-gradient(135deg, #ff00ff, #ff0000); }
 }
 
-.main-header {
-    animation: fadeIn 1s ease-out;
-}
-
-.sub-header {
-    animation: fadeIn 1s ease-out 0.3s both;
-}
-
-/* Custom scrollbar */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -223,31 +226,53 @@ css = """
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 0, 128, 0.6);
+    background: linear-gradient(135deg, #ff0000, #00ff00, #0000ff);
     border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 0, 128, 0.8);
+    background: linear-gradient(135deg, #ff00ff, #ffff00, #00ffff);
 }
 
-/* Pulse animation for important elements */
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+/* Progress bar styling */
+.stProgress > div > div {
+    background: linear-gradient(135deg, #ff0000, #00ff00, #0000ff);
+    animation: progressRGB 4s ease-in-out infinite;
 }
 
-.pulse {
-    animation: pulse 2s infinite;
+@keyframes progressRGB {
+    0% { background: linear-gradient(135deg, #ff0000, #00ff00); }
+    50% { background: linear-gradient(135deg, #00ff00, #0000ff); }
+    100% { background: linear-gradient(135deg, #0000ff, #ff0000); }
 }
 
-/* File uploader styling */
-.stFileUploader {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    padding: 10px;
-    backdrop-filter: blur(5px);
+/* Success message styling */
+.stSuccess {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.9), rgba(0, 200, 0, 0.9));
+    border-radius: 15px;
+    border-left: 5px solid #00ff00;
+}
+
+/* Error message styling */
+.stError {
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.9), rgba(200, 0, 0, 0.9));
+    border-radius: 15px;
+    border-left: 5px solid #ff0000;
+}
+
+/* Warning message styling */
+.stWarning {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.9), rgba(200, 120, 0, 0.9));
+    border-radius: 15px;
+    border-left: 5px solid #ffa500;
+}
+
+/* Info message styling */
+.stInfo {
+    background: linear-gradient(135deg, rgba(0, 191, 255, 0.9), rgba(0, 150, 200, 0.9));
+    border-radius: 15px;
+    border-left: 5px solid #00bfff;
 }
 </style>
 """
