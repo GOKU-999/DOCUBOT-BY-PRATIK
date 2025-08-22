@@ -8,7 +8,7 @@ css = """
 
 .stApp {
     background: linear-gradient(rgba(0, 87, 184, 0.85), rgba(173, 0, 0, 0.85)), 
-                url('https://images.unsplash.com/photo-1621416894546-83747c6794b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80');
+                url('https://wallpapers.com/lionel-messi');
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
