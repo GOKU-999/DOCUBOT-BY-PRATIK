@@ -7,7 +7,7 @@ css = """
 }
 
 .stApp {
-    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(255, 0, 150));
+    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(0, 200, 180));
     background-attachment: fixed;
     background-size: cover;
 }
@@ -31,14 +31,14 @@ css = """
 }
 
 .stSidebar {
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(173, 216, 230, 0.95) !important; /* Light Blue */
     border-radius: 15px;
     padding: 20px;
     margin: 10px;
 }
 
 .stButton button {
-    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(255, 0, 150));
+    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(0, 200, 180));
     color: white;
     border: none;
     border-radius: 8px;
@@ -66,7 +66,7 @@ css = """
 }
 
 .user-message {
-    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(255, 0, 150));
+    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(0, 200, 180));
     color: white;
     border-radius: 15px 15px 0 15px;
     padding: 12px;
