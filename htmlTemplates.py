@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Chat Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -308,12 +309,12 @@
             </div>
             
             <ul class="sidebar-menu">
-                <li class="active"><i>💬</i> New Chat</li>
-                <li><i>📁</i> Documents</li>
-                <li><i>⚙️</i> Settings</li>
-                <li><i>🔍</i> Search</li>
-                <li><i>📊</i> Analytics</li>
-                <li><i>🙋</i> Help</li>
+                <li class="active"><i class="fas fa-comment"></i> New Chat</li>
+                <li><i class="fas fa-file"></i> Documents</li>
+                <li><i class="fas fa-cog"></i> Settings</li>
+                <li><i class="fas fa-search"></i> Search</li>
+                <li><i class="fas fa-chart-bar"></i> Analytics</li>
+                <li><i class="fas fa-question-circle"></i> Help</li>
             </ul>
             
             <div style="margin-top: auto; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px;">
@@ -336,6 +337,7 @@
                 <div class="message bot-message">
                     <div class="message-inner">
                         <div class="message-header">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%237a8cff'/%3E%3Cpath d='M30 40 L70 40 L70 65 L50 45 L30 65 Z' fill='%23fff'/%3E%3C/svg%3E" alt="Bot">
                             <h3>DocuBot</h3>
                         </div>
                         <div class="message-content">
@@ -348,6 +350,7 @@
                 <div class="message user-message">
                     <div class="message-inner">
                         <div class="message-header">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%235ef1e3'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%23fff'/%3E%3Cpath d='M30 85 Q50 65 70 85 Z' fill='%23fff'/%3E%3C/svg%3E" alt="User">
                             <h3>You</h3>
                         </div>
                         <div class="message-content">
@@ -359,6 +362,7 @@
                 <div class="message bot-message">
                     <div class="message-inner">
                         <div class="message-header">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%237a8cff'/%3E%3Cpath d='M30 40 L70 40 L70 65 L50 45 L30 65 Z' fill='%23fff'/%3E%3C/svg%3E" alt="Bot">
                             <h3>DocuBot</h3>
                         </div>
                         <div class="message-content">
@@ -435,6 +439,7 @@
                 messageDiv.innerHTML = `
                     <div class="message-inner">
                         <div class="message-header">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%235ef1e3'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%23fff'/%3E%3Cpath d='M30 85 Q50 65 70 85 Z' fill='%23fff'/%3E%3C/svg%3E" alt="User">
                             <h3>You</h3>
                         </div>
                         <div class="message-content">
@@ -456,6 +461,7 @@
                     botResponse.innerHTML = `
                         <div class="message-inner">
                             <div class="message-header">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%237a8cff'/%3E%3Cpath d='M30 40 L70 40 L70 65 L50 45 L30 65 Z' fill='%23fff'/%3E%3C/svg%3E" alt="Bot">
                                 <h3>DocuBot</h3>
                             </div>
                             <div class="message-content">
