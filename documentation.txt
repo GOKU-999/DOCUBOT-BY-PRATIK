@@ -1,0 +1,758 @@
+Documentation for Chat with PDFs and SkillUp Application:-
+
+Table of Contents:
+
+1)Introduction
+2)System Architecture
+3)Comprehensive Code Analysis: Chat with PDFs and SkillUp Application
+4)Data Flow
+5)Installation Guide
+6)Setup Steps
+7)Code Structure
+8)Configuration
+9)Usage Guide
+10)Advanced Features
+11)Troubleshooting
+12)Future Enhancements
+13)References
+14)Api Key(for .env file)
+
+
+1) Introduction:-
+
+The Chat with PDFs and SkillUp application is an AI-powered document assistant that allows users to upload PDF documents and interact with them through natural language queries. 
+The application leverages Google's Gemini AI models to provide intelligent responses based on the content of the uploaded documents.
+
+Key features include:
+a)PDF document processing and text extraction.
+b)Natural language understanding and question answering.
+b)Conversational memory for contextual discussions.
+c)Attractiv user interface with responsive design.
+d)Support for multiple PDF documents.
+
+
+
+
+
+
+
+2) System Architecture:-
+
+The application follows a client-server architecture with the following components:
+
+a)Frontend: Built using Streamlit for web interface
+b)Backend: Python-based processing pipeline
+c)AI Services: Google Generative AI for embeddings and chat
+d)Vector Database: FAISS for efficient similarity search
+
+
+
+
+
+
+
+
+
+3) Comprehensive Code Analysis: Chat with PDFs and SkillUp Application:-
+
+1.Overview Analysis
+
+The application is a Streamlit-based PDF chatbot that uses Google's Gemini AI for document processing and conversation. 
+It follows a clean architecture with clear separation between:
+a)Frontend (Streamlit UI)
+b)Business logic (PDF processing and AI integration)
+c)Presentation layer (HTML templates)
+
+Key strengths:
+a)Robust error handling with multiple fallbacks
+b)Modern, responsive UI design
+c)Efficient document processing pipeline
+d)Well-structured session state management
+
+
+2.Initialization and Setup (app.py)
+
+Python code:
+
+import streamlit as st
+from dotenv import load_dotenv
+import pdfplumber
+from langchain.text_splitter import CharacterTextSplitter
+from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain.vectorstores import FAISS
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationalRetrievalChain
+from htmlTemplates import css, bot_template, user_template
+import asyncio
+import nest_asyncio
+
+
+nest_asyncio.apply()
+
+Analysis:
+
+A)Comprehensive imports covering all required functionality
+B)Special handling for asyncio event loop issues with nest_asyncio
+C)Environment variables loaded via dotenv
+D)All major LangChain components imported for:
+
+a)Text splitting
+b)Google AI integration
+c)Vector storage
+d)Conversation memory
+e)Retrieval chains
+
+ 2.1 PDF Processing Functions
+ 2.1.1 get_pdf_text()
+
+Python code:
+
+def get_pdf_text(pdf_docs):
+    text = ""
+    for pdf in pdf_docs:
+        try:
+            with pdfplumber.open(pdf) as pdf_file:
+                for page in pdf_file.pages:
+                    text += page.extract_text() or ""
+        except Exception as e:
+            st.warning(f"Could not read {pdf.name} with pdfplumber: {str(e)}. Trying fallback method...")
+            try:
+                from PyPDF2 import PdfReader
+                pdf_reader = PdfReader(pdf)
+                for page in pdf_reader.pages:
+                    text += page.extract_text() or ""
+            except Exception as e:
+                st.error(f"Failed to read {pdf.name}: {str(e)}")
+                continue
+    return text
+
+Analysis:
+
+a)Robust text extraction with primary (pdfplumber) and fallback (PyPDF2) methods
+b)Graceful error handling with user feedback
+c)Concatenates text from all pages of all PDFs
+d)Uses or "" to handle None returns from extract_text()
+e)Returns combined text string
+
+2.2 get_text_chunks()
+
+Python code:
+
+def get_text_chunks(text):
+    text_splitter = CharacterTextSplitter(
+        separator="\n",
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len
+    )
+    chunks = text_splitter.split_text(text)
+return chunks
+
+Analysis:
+
+A)Uses LangChain's CharacterTextSplitter
+B)Sensible defaults:
+
+a)1000-character chunks
+b)200-character overlap for context preservation
+
+C)Splits on newlines for natural breaks
+D)Returns list of text chunks
+
+2.3 Vector Store and Conversation Setup
+2.3.1 get_vectorstore()
+
+Python code:
+
+def get_vectorstore(text_chunks):
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
+return vectorstore
+
+Analysis:
+
+A)Uses Google's embedding-001 model
+
+B)FAISS for efficient similarity search
+
+C)Simple, straightforward implementation
+
+D)Returns FAISS vector store instance
+
+2.3.2 get_conversation_chain()
+
+Python code:
+
+def get_conversation_chain(vectorstore):
+    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.3)
+    memory = ConversationBufferMemory(
+        memory_key='chat_history', 
+        return_messages=True
+    )
+    conversation_chain = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=vectorstore.as_retriever(),
+        memory=memory,
+        get_chat_history=lambda h: h,
+        verbose=True
+    )
+return conversation_chain
+
+Analysis:
+
+A)Uses Gemini 2.5 Flash model with conservative temperature (0.3)
+B)ConversationBufferMemory for maintaining chat history
+C)ConversationalRetrievalChain combines:
+
+a)LLM for generation
+b)Retriever for document access
+c)Memory for context
+
+D)Verbose mode for debugging
+E)Returns configured conversation chain
+
+2.4 User Input Handling
+2.4.1 handle_userinput()
+
+Python code:
+
+def handle_userinput(user_question):
+    if st.session_state.conversation is None:
+        st.warning("Please process PDFs first before asking questions.")
+        return
+    
+    try:
+        response = st.session_state.conversation({'question': user_question})
+        st.session_state.chat_history = response['chat_history']
+
+        for i, message in enumerate(st.session_state.chat_history):
+            if i % 2 == 0:
+                st.write(user_template.replace(
+                    "{{MSG}}", message.content), unsafe_allow_html=True)
+            else:
+                st.write(bot_template.replace(
+                    "{{MSG}}", message.content), unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f"Error getting response: {str(e)}")
+
+Analysis:
+
+A)Checks for initialized conversation state
+B)Graceful error handling
+C)Processes conversation through chain
+D)Stores chat history in session state
+E)Alternates between user and bot templates
+F)Uses HTML templates for consistent formatting
+G)Shows error messages to user when needed
+
+2.5 Main Application Flow
+2.5.1 main()
+
+Python code:
+
+def main():
+    # Ensure event loop exists
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())
+
+    load_dotenv()
+    st.set_page_config(page_title="Chat with PDFs and SkillUp",
+                     page_icon=":books:")
+    st.write(css, unsafe_allow_html=True)
+
+    if "conversation" not in st.session_state:
+        st.session_state.conversation = None
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = None
+
+    st.header("Chat with PDFs and SkillUp  📝📚")
+    st.header("Chat with our DocuBOT💡 | who will help you to skillup your knowledge \n He likes to eat lot of PDF and in return he will satisfies your query 😊")
+    user_question = st.text_input("Ask a question about your documents:")
+    if user_question:
+        handle_userinput(user_question)
+
+    with st.sidebar:
+        st.subheader("Your documents")
+        pdf_docs = st.file_uploader(
+            "Upload your PDFs here and click on 'Process'", 
+            accept_multiple_files=True,
+            type=["pdf"])
+            
+        if st.button("Process"):
+            if not pdf_docs:
+                st.warning("Please upload at least one PDF file")
+                return
+                
+            with st.spinner("Processing"):
+                try:
+                    raw_text = get_pdf_text(pdf_docs)
+                    
+                    if not raw_text.strip():
+                        st.error("Could not extract any text from the PDFs. They may be scanned images or corrupted.")
+                        return
+
+                    text_chunks = get_text_chunks(raw_text)
+                    vectorstore = get_vectorstore(text_chunks)
+                    st.session_state.conversation = get_conversation_chain(vectorstore)
+                    st.success("PDFs processed successfully with Gemini!")
+                except Exception as e:
+                    st.error(f"An error occurred: {str(e)}")
+
+Analysis:
+
+A)Ensures event loop exists for async operations
+B)Loads environment variables
+C)Sets up page configuration
+D)Injects CSS styles
+E)Initializes session state
+F)Main UI with:
+
+a)Header and description
+b)Question input
+c)Sidebar for document upload
+
+G)Full processing pipeline:
+
+a)PDF upload validation
+b)Text extraction
+c)Chunking
+d)Vector store creation
+e)Conversation chain setup
+
+H)Comprehensive error handling
+I)User feedback throughout process
+
+2.6 HTML Templates (htmlTemplates.py)
+2.6.1 CSS Styles:
+
+.stApp {
+    background-image: url('https://img.pikbest.com/wp/202343/sleek-contemporary-abstract-grid-black-background-with-geometric-patterns_9971045.jpg!w700wp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+Analysis:
+
+A)Modern dark theme with geometric background
+B)Full viewport height
+C)Fixed background for consistency
+
+2.6.2 Chat Message Styles:
+
+.chat-message {
+    padding: 1.5rem; 
+    border-radius: 12px; 
+    margin-bottom: 1.5rem; 
+    display: flex;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+Analysis:
+
+A)Clean, modern chat bubbles
+B)Smooth animations and transitions
+C)Visual distinction between messages
+D)Blur effect for depth
+E)Responsive design
+
+2.6.3 Bot and User Templates
+html
+
+<div class="chat-message bot">
+    <div class="avatar">
+        <img src="https://img.freepik.com/free-vector/cartoon-style-robot-vectorart_78370-4103.jpg?semt=ais_hybrid&w=740&q=80">
+    </div>
+    <div class="message">{{MSG}}</div>
+</div>
+
+Analysis:
+
+A)Clear visual distinction between user and bot
+B)Avatar images for personality
+C)Template system with {{MSG}} placeholder
+D)Consistent styling with CSS classes
+
+
+
+
+
+
+
+
+
+
+4) Data Flow:-
+
+ User uploads PDF documents through the web interface
+
+ System extracts text from PDFs using pdfplumber (with PyPDF2 fallback)
+
+ Text is split into manageable chunks
+
+ Chunks are converted to vector embeddings using Google's embedding model
+
+ Vectors are stored in FAISS for fast retrieval
+
+ User queries are processed through conversational chain
+
+ Relevant document sections are retrieved and used to generate responses
+
+
+
+
+
+
+
+
+
+
+5) Installation Guide:-
+
+Prerequisites:
+
+ Python 3.8 or higher
+
+ pip package manager
+
+ Google API key (for Gemini access)
+
+
+
+
+
+
+
+
+
+
+
+6) Setup Steps:-
+
+Install dependencies:
+
+a)pip install -r requirements.txt
+
+Run the application:
+ 
+a)streamlit run app.py
+
+b)If not working then-
+      Python -m streamlit run app.py
+
+
+
+
+
+
+
+
+      
+      
+7)   Code Structure:-
+
+Main Application (app.py)
+
+Key Functions:
+
+get_pdf_text(pdf_docs):
+
+a)Extracts text from uploaded PDF files
+
+b)Uses pdfplumber as primary method with PyPDF2 fallback
+
+c)Handles errors gracefully with user feedback
+
+get_text_chunks(text):
+
+a.Splits extracted text into manageable chunks
+
+b.Uses CharacterTextSplitter with configurable parameters
+
+c.Ensures proper context overlap between chunks
+
+get_vectorstore(text_chunks):
+
+a)Converts text chunks to vector embeddings
+
+b)Uses Google's embedding-001 model
+
+c)Stores vectors in FAISS for efficient retrieval
+
+get_conversation_chain(vectorstore):
+
+a.Sets up conversational retrieval chain
+
+b.Uses Gemini 2.5 Flash model with temperature 0.3
+
+c.Maintains conversation history in memory
+
+handle_userinput(user_question):
+
+a)Processes user queries
+
+b)Manages conversation flow
+
+c)Displays messages with appropriate formatting
+
+main():
+
+a.Configures Streamlit application
+
+b.Manages session state
+
+c.Handles file uploads and processing
+
+HTML Templates (htmlTemplates.py)
+
+Components:
+
+CSS Styles:
+
+a)Modern dark theme with gradient backgrounds
+
+b)Responsive design for chat messages
+
+c)Visual enhancements including shadows and animations
+
+Bot Template:
+
+a.Structured display for AI responses
+
+b.Includes robot avatar image
+
+c.Distinct styling from user messages
+
+User Template:
+
+a)Structured display for user questions
+
+b)Includes human avatar image
+
+c)Clear visual differentiation from bot messages
+
+
+
+
+
+
+
+
+
+
+
+8) Configuration:-
+
+Environment Variables:
+
+GOOGLE_API_KEY: Required for accessing Gemini AI services
+
+Customization Options:
+
+Text Processing:
+
+d)Modify chunk size and overlap in get_text_chunks()
+
+e)Adjust text extraction fallback behavior
+
+AI Models:
+
+a.Change embedding model in get_vectorstore()
+
+b.Adjust chat model parameters in get_conversation_chain()
+
+UI Styling:
+
+a)Modify CSS in htmlTemplates.py
+
+b)Update avatar images by changing URLs
+
+c)Adjust color schemes and layout parameters
+
+
+
+
+
+
+
+
+
+9) Usage Guide:-
+
+Basic Workflow:
+
+Upload Documents:
+
+ Click "Browse files" in the sidebar
+
+ Select one or more PDF documents
+
+ Click "Process" to analyze documents
+
+Ask Questions:
+
+ Type your question in the input box
+
+ Press Enter or wait for the response
+
+ Continue the conversation naturally
+
+Start New Session:
+
+ Refresh the page to clear conversation history
+
+ Upload new documents as needed
+
+
+
+
+
+
+
+
+
+10) Advanced Features:-
+
+Document Analysis:
+
+ The system can handle multiple documents simultaneously
+
+ Questions will be answered based on all processed content
+
+Contextual Understanding:
+
+ The bot maintains conversation context
+
+ Follow-up questions are understood in context
+
+Error Handling:
+
+ The application provides clear error messages
+
+ Fallback mechanisms ensure maximum compatibility
+
+
+
+
+
+
+
+
+
+11) Troubleshooting:-
+
+Common Issues and Solutions:
+
+PDF Processing Fails:
+
+1.Ensure documents are not password protected
+
+2.Verify documents contain selectable text (not just images)
+
+3.Try simpler PDFs to test functionality
+
+API Errors:
+
+a)Verify GOOGLE_API_KEY is set correctly
+
+b)Check Google API usage limits
+
+c)Ensure your network allows outbound connections
+
+Performance Issues:
+
+1.Reduce PDF file sizes if processing is slow
+
+2.Decrease chunk size in text splitting
+
+3.Limit the number of simultaneous documents
+
+UI Rendering Problems:
+
+a)Clear browser cache
+
+b)Try a different browser
+
+c)Check for JavaScript errors in console
+
+
+
+
+
+
+
+
+
+
+12) Future Enhancements:-
+
+Planned Improvements:
+
+Additional File Formats:
+
+ Support for Word, PowerPoint, and Excel files
+
+ Plain text and HTML document processing
+
+Enhanced AI Capabilities:
+
+ Document summarization
+
+ Key point extraction
+
+ Automatic categorization
+
+User Experience:
+
+ Downloadable conversation history
+
+ Document-specific questioning
+
+ Multi-language support
+
+Administrative Features:
+
+ User authentication
+
+ Document management system
+
+ Usage analytics
+
+Technical Improvements:
+
+ Persistent vector storage
+
+ Batch processing capabilities
+
+ Alternative vector database options
+
+
+
+
+
+
+13) References:-
+
+1.	https://youtu.be/pApPGFwbigI?si=gNydpp_bgfq_u9J6
+
+
+2.	https://youtu.be/wOAV3He6y4c?si=rdMeAbowQgZTUsSR
+
+
+3.	https://youtu.be/tplBmkij1ns?si=tulL1syVqkEvJ4nP
+
+
+
+
+14) API KEY(for .env file):-
+
+1. AIzaSyDENDOYn0e3BF7fTxLr6m1C4XbKrzXAuk4
+
+2. AIzaSyCodxnGuWB1yPX2ji64TTvU8E1fhyvz7J4

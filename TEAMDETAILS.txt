@@ -1,0 +1,10 @@
+TOPIC: PDF Document Question Answering LLM System(Extracts and answers user queries based on the content of PDF documents.)
+
+
+Sl no.	      Name	           Roll no.	              Email id	                  Phone no.	
+
+1.	        ANKIT SOME	       24100124089	     ankitsome190@gmail.com	         6290306993
+
+3.	        SOURADIP GHOSH	   24100124178	    souradipghoshpro@gmail.com	     8902203554	
+
+2.	        PRATIK ACHARYA	   24100124057	    pratikacharya119@gmail.com	     6295617917	
