@@ -33,17 +33,15 @@ css = """
 
 /* Sidebar with different light RGB gradient */
 .stSidebar {
-    background: linear-gradient(-45deg, 
-        rgba(230, 240, 255, 0.9), 
-        rgba(240, 230, 255, 0.9), 
-        rgba(255, 240, 230, 0.9));
+    background: linear-gradient(-45deg, #00ffaa, #00aaff, #aa00ff, #ff00aa);
     background-size: 400% 400%;
     animation: sidebarGradient 15s ease infinite;
     border-radius: 15px;
     padding: 20px;
     margin: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes sidebarGradient {
