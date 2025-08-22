@@ -103,7 +103,7 @@ css = """
     100% { background-position: 0% 50%; }
 }
 
-/* Input field with RGB border */
+/* Input field with RGB border - FIXED TEXT VISIBILITY */
 .stTextInput input {
     border-radius: 12px;
     padding: 14px;
@@ -112,12 +112,20 @@ css = """
     background: rgba(255, 255, 255, 0.95);
     transition: all 0.3s ease;
     font-weight: 500;
+    color: #2d3436 !important; /* Added text color */
 }
 
 .stTextInput input:focus {
     border-image: linear-gradient(45deg, #fd79a8, #fdcb6e, #00cec9) 1;
     box-shadow: 0 0 20px rgba(253, 121, 168, 0.3);
     background: rgba(255, 255, 255, 1);
+    color: #2d3436 !important; /* Added text color for focus state */
+}
+
+/* Placeholder text color */
+.stTextInput input::placeholder {
+    color: #636e72 !important;
+    opacity: 0.8;
 }
 
 /* Chat container with different RGB colors */
@@ -274,6 +282,48 @@ css = """
         margin: 10px;
         padding: 20px;
     }
+}
+
+/* Additional fixes for text visibility in all input areas */
+.stTextArea textarea {
+    color: #2d3436 !important;
+    font-weight: 500;
+}
+
+.stTextArea textarea::placeholder {
+    color: #636e72 !important;
+    opacity: 0.8;
+}
+
+.stSelectbox select {
+    color: #2d3436 !important;
+    font-weight: 500;
+}
+
+.stNumberInput input {
+    color: #2d3436 !important;
+    font-weight: 500;
+}
+
+.stNumberInput input::placeholder {
+    color: #636e72 !important;
+    opacity: 0.8;
+}
+
+/* Ensure all text in the app is visible */
+body {
+    color: #2d3436 !important;
+}
+
+/* Specific fix for the chat input text */
+[data-testid="stChatInput"] textarea {
+    color: #2d3436 !important;
+    font-weight: 500;
+}
+
+[data-testid="stChatInput"] textarea::placeholder {
+    color: #636e72 !important;
+    opacity: 0.8;
 }
 </style>
 """
