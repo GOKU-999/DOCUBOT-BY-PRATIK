@@ -2,7 +2,9 @@ streamlit
 python-dotenv
 pdfplumber
 PyPDF2
+openai 
 langchain
+langchain-community
 langchain-google-genai
 faiss-cpu
 nest-asyncio
