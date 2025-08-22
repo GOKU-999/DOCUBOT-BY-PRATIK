@@ -2,7 +2,7 @@ css = '''
 <style>
     /* Background setup with placeholder comment */
     .stApp {
-        background-image: url('https://wallpapers.com/lionel-messi');
+        background-image: url('https://wallpapercave.com/wp/wp5730512.jpg');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
