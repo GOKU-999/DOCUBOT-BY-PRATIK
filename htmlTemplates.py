@@ -1,3 +1,4 @@
+css = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -98,3 +99,16 @@
     font-size: 0.9rem;
 }
 </style>
+"""
+
+bot_template = """
+<div class="bot-message">
+    🤖 DOCUBOT: {{MSG}}
+</div>
+"""
+
+user_template = """
+<div class="user-message">
+    👤 You: {{MSG}}
+</div>
+"""
