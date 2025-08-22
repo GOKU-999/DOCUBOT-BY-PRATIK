@@ -1,106 +1,109 @@
-css = '''
+css = """
 <style>
-    /* Background setup with placeholder comment */
-    .stApp {  background: linear-gradient(rgba(0, 87, 184, 0.85), rgba(173, 0, 0, 0.85)),
-    
-        background-image: url('https://images.unsplash.com/photo-1621416894546-83747c6794b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        background-repeat: no-repeat;
-        min-height: 100vh;
-    }
-    
-    /* Semi-transparent overlay to ensure text readability */
-    .stApp::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(15, 17, 22, 0.85);
-        z-index: -1;
-    }
-    
-    /* Chat message enhancements for better visibility on backgrounds */
-    .chat-message {
-        padding: 1.5rem; 
-        border-radius: 12px; 
-        margin-bottom: 1.5rem; 
-        display: flex;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-        transition: all 0.3s ease;
-        backdrop-filter: blur(4px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .chat-message:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .chat-message.user {
-        background: linear-gradient(135deg, rgba(43, 49, 62, 0.9) 0%, rgba(58, 66, 82, 0.95) 100%);
-        border-left: 4px solid #4f8bf9;
-    }
-    
-    .chat-message.bot {
-        background: linear-gradient(135deg, rgba(71, 80, 99, 0.9) 0%, rgba(86, 101, 122, 0.95) 100%);
-        border-left: 4px solid #f94f7b;
-    }
-    
-    .chat-message .avatar {
-        width: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 1rem;
-    }
-    
-    .chat-message .avatar img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-    
-    .chat-message .message {
-        flex: 1;
-        padding: 0.75rem 1.25rem;
-        color: #ffffff;
-        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        line-height: 1.7;
-        font-size: 1rem;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Sidebar styling to match */
-    .stSidebar {
-        background: rgba(20, 23, 30, 0.85) !important;
-        backdrop-filter: blur(8px);
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-    }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+.stApp {
+    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(255, 0, 150));
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.main-header {
+    color: white;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sub-header {
+    color: white;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.stSidebar {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 10px;
+}
+
+.stButton button {
+    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(255, 0, 150));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.stButton button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.stTextInput input {
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.chat-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.user-message {
+    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(255, 0, 150));
+    color: white;
+    border-radius: 15px 15px 0 15px;
+    padding: 12px;
+    margin: 10px 0;
+    max-width: 80%;
+    margin-left: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bot-message {
+    background: #f0f2f6;
+    color: #333;
+    border-radius: 15px 15px 15px 0;
+    padding: 12px;
+    margin: 10px 0;
+    max-width: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+    color: white;
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
 </style>
-'''
+"""
 
-bot_template = '''
-<div class="chat-message bot">
-    <div class="avatar">
-        <img src="https://img.freepik.com/free-vector/cartoon-style-robot-vectorart_78370-4103.jpg?semt=ais_hybrid&w=740&q=80">
-    </div>
-    <div class="message">{{MSG}}</div>
+# HTML templates for chat messages
+bot_template = """
+<div class="bot-message">
+    🤖 DOCUBOT: {{MSG}}
 </div>
-'''
+"""
 
-user_template = '''
-<div class="chat-message user">
-    <div class="avatar">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrT9QfTWesZk1IklGxsaH7hioyMTC7oLyTYg&s">
-    </div>
-    <div class="message">{{MSG}}</div>
+user_template = """
+<div class="user-message">
+    👤 You: {{MSG}}
 </div>
-'''
+"""
