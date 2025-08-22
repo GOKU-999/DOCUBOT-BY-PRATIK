@@ -79,20 +79,14 @@ css = """
 
 /* Button styles with good contrast */
 .stButton button {
-    background: linear-gradient(-45deg, 
-        rgba(100, 150, 255, 0.8), 
-        rgba(150, 100, 255, 0.8), 
-        rgba(255, 100, 150, 0.8));
-    background-size: 400% 400%;
-    animation: buttonGradient 10s ease infinite;
+    background: linear-gradient(135deg, rgb(0, 123, 255), rgb(0, 200, 180));
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 12px 24px;
-    font-weight: 600;
+    padding: 10px 20px;
+    font-weight: 500;
     width: 100%;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes buttonGradient {
