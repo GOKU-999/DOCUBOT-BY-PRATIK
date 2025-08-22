@@ -4,6 +4,7 @@ css = """
 
 * {
     font-family: 'Poppins', sans-serif;
+    color: #ffffff;
 }
 
 /* Main app background - RGB animation */
@@ -36,6 +37,7 @@ css = """
     margin: 10px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes sidebarGradient {
@@ -50,31 +52,37 @@ css = """
     }
 }
 
-/* Header styles */
+/* Ensure text is readable against background */
+.stSidebar * {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Header styles with improved readability */
 .main-header {
-    color: white;
+    background: rgba(0, 0, 0, 0.7);
     text-align: center;
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.3);
     padding: 15px;
     border-radius: 15px;
     backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .sub-header {
-    color: white;
+    background: rgba(0, 0, 0, 0.7);
     text-align: center;
     font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 2rem;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.3);
     padding: 10px;
     border-radius: 10px;
     backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Button styles */
@@ -90,6 +98,7 @@ css = """
     width: 100%;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 @keyframes buttonGradient {
@@ -113,26 +122,32 @@ css = """
 .stTextInput input {
     border-radius: 10px;
     padding: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.7);
     transition: all 0.3s ease;
+    color: white !important;
+    backdrop-filter: blur(5px);
 }
 
 .stTextInput input:focus {
     border-color: #00ffff;
     box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 1);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.stTextInput input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
 /* Chat container */
 .chat-container {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 15px;
     padding: 25px;
     margin-bottom: 20px;
     backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Message styles */
@@ -147,6 +162,7 @@ css = """
     max-width: 80%;
     margin-left: auto;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 @keyframes userMessage {
@@ -171,6 +187,7 @@ css = """
     margin: 12px 0;
     max-width: 80%;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 @keyframes botMessage {
@@ -187,15 +204,15 @@ css = """
 
 /* Footer */
 .footer {
-    color: white;
     text-align: center;
     margin-top: 2rem;
     font-size: 0.9rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.7);
     padding: 10px;
     border-radius: 10px;
     backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Animation for the header */
@@ -244,10 +261,44 @@ css = """
 
 /* File uploader styling */
 .stFileUploader {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     padding: 10px;
     backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Ensure all text in the app is readable */
+.stMarkdown, p, h1, h2, h3, h4, h5, h6, li, ul, ol, span, div {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Specific styling for sidebar text elements */
+.stSidebar h1, .stSidebar h2, .stSidebar h3, 
+.stSidebar h4, .stSidebar h5, .stSidebar h6,
+.stSidebar p, .stSidebar label, .stSidebar div {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Make success/error messages readable */
+.stAlert {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stAlert p {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Progress bar styling */
+.stProgress > div > div {
+    background: linear-gradient(-45deg, #ff0000, #00ff00, #0000ff);
+    background-size: 400% 400%;
+    animation: buttonGradient 10s ease infinite;
 }
 </style>
 """
