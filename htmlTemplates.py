@@ -7,8 +7,7 @@ css = """
 }
 
 .stApp {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    background-attachment: fixed;
+    background: url("https://wallpapercave.com/wp/wp5730512.jpg") no-repeat center center fixed;
     background-size: cover;
 }
 
