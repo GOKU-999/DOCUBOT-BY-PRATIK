@@ -103,7 +103,7 @@ css = """
     100% { background-position: 0% 50%; }
 }
 
-/* Input field with RGB border - FIXED TEXT VISIBILITY */
+/* Input field with RGB border - FIXED CURSOR VISIBILITY */
 .stTextInput input {
     border-radius: 12px;
     padding: 14px;
@@ -112,14 +112,16 @@ css = """
     background: rgba(255, 255, 255, 0.95);
     transition: all 0.3s ease;
     font-weight: 500;
-    color: #2d3436 !important; /* Added text color */
+    color: #2d3436 !important;
+    caret-color: #ff6b6b !important; /* Added cursor color */
 }
 
 .stTextInput input:focus {
     border-image: linear-gradient(45deg, #fd79a8, #fdcb6e, #00cec9) 1;
     box-shadow: 0 0 20px rgba(253, 121, 168, 0.3);
     background: rgba(255, 255, 255, 1);
-    color: #2d3436 !important; /* Added text color for focus state */
+    color: #2d3436 !important;
+    caret-color: #fd79a8 !important; /* Added cursor color for focus */
 }
 
 /* Placeholder text color */
@@ -257,9 +259,9 @@ css = """
 
 /* Pulse animation for interactive elements */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+   0% { transform: scale(1); }
+   50% { transform: scale(1.05); }
+   100% { transform: scale(1); }
 }
 
 .pulse:hover {
@@ -288,6 +290,7 @@ css = """
 .stTextArea textarea {
     color: #2d3436 !important;
     font-weight: 500;
+    caret-color: #ff6b6b !important; /* Added cursor color */
 }
 
 .stTextArea textarea::placeholder {
@@ -303,6 +306,7 @@ css = """
 .stNumberInput input {
     color: #2d3436 !important;
     font-weight: 500;
+    caret-color: #ff6b6b !important; /* Added cursor color */
 }
 
 .stNumberInput input::placeholder {
@@ -315,15 +319,40 @@ body {
     color: #2d3436 !important;
 }
 
-/* Specific fix for the chat input text */
+/* Specific fix for the chat input text and cursor */
 [data-testid="stChatInput"] textarea {
     color: #2d3436 !important;
     font-weight: 500;
+    caret-color: #ff6b6b !important; /* Added cursor color */
 }
 
 [data-testid="stChatInput"] textarea::placeholder {
     color: #636e72 !important;
     opacity: 0.8;
+}
+
+/* Cursor visibility fix for all text inputs */
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], textarea {
+    caret-color: #ff6b6b !important;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, textarea:focus {
+    caret-color: #fd79a8 !important;
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Ensure cursor is visible in all input types */
+input, textarea {
+    caret-color: #ff6b6b !important;
+}
+
+input:focus, textarea:focus {
+    caret-color: #fd79a8 !important;
 }
 </style>
 """
