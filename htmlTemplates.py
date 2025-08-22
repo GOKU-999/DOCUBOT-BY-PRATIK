@@ -334,6 +334,11 @@ css = """
         margin: 10px;
         padding: 20px;
     }
+        }
+    .stFileUploader {
+        padding: 15px !important;
+        margin: 10px 0 !important;
+    }
 }
 
 /* Additional fixes for text visibility in all input areas */
@@ -403,6 +408,16 @@ input, textarea {
 
 input:focus, textarea:focus {
     caret-color: #fd79a8 !important;
+}
+[data-testid="stFileUploadDropzone"] {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 2px dashed rgba(102, 126, 234, 0.5) !important;
+    border-radius: 15px !important;
+}
+
+[data-testid="stFileUploadDropzone"]:hover {
+    border: 2px dashed rgba(102, 126, 234, 0.8) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
 }
 </style>
 """
