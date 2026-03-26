@@ -6,8 +6,9 @@ import pdfplumber
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
-from langchain.memory import ConversationBufferMemory
+from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
 from htmlTemplates import css, bot_template, user_template
 import asyncio
 import nest_asyncio
@@ -62,8 +63,7 @@ def get_vectorstore(text_chunks):
 def get_conversation_chain(vectorstore):
     llm = ChatGoogleGenerativeAI(
         model="gemini-1.5-flash", 
-        temperature=0.3,
-        convert_system_message_to_human=True
+        temperature=0.3
     )
     
     memory = ConversationBufferMemory(
@@ -196,7 +196,6 @@ def main():
     
     if user_question and st.session_state.processed_files:
         handle_userinput(user_question)
-        # Clear the input after processing (using rerun)
         st.rerun()
     
     st.markdown('</div>', unsafe_allow_html=True)
