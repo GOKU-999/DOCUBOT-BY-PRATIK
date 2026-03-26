@@ -1,14 +1,7 @@
 import streamlit as st
-from dotenv import load_dotenv
 import pdfplumber
 import os
-import tempfile
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
-from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import TextLoader
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationalRetrievalChain
+from dotenv import load_dotenv
 
 # Page config
 st.set_page_config(
@@ -81,120 +74,78 @@ st.markdown("""
         border-radius: 10px;
         padding: 0.5rem 1rem;
         font-weight: bold;
+        width: 100%;
+    }
+    
+    .stButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 </style>
 """, unsafe_allow_html=True)
 
-def get_pdf_text(pdf_docs):
-    """Extract text from PDF files"""
+def extract_text_from_pdf(pdf_file):
+    """Extract text from a single PDF file"""
     text = ""
-    for pdf in pdf_docs:
-        try:
-            with pdfplumber.open(pdf) as pdf_file:
-                for page in pdf_file.pages:
-                    page_text = page.extract_text()
-                    if page_text:
-                        text += page_text + "\n"
-        except Exception as e:
-            st.error(f"Error reading {pdf.name}: {str(e)}")
-            continue
+    try:
+        with pdfplumber.open(pdf_file) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n"
+    except Exception as e:
+        st.error(f"Error reading PDF: {str(e)}")
     return text
 
-def get_text_chunks(text):
-    """Split text into chunks"""
-    text_splitter = CharacterTextSplitter(
-        separator="\n",
-        chunk_size=1000,
-        chunk_overlap=200,
-        length_function=len
-    )
-    chunks = text_splitter.split_text(text)
-    return chunks
-
-def get_vectorstore(text_chunks):
-    """Create vector store"""
-    try:
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-        vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
-        return vectorstore
-    except Exception as e:
-        st.error(f"Error creating vector store: {str(e)}")
-        return None
-
-def get_conversation_chain(vectorstore):
-    """Create conversation chain"""
-    try:
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-pro",
-            temperature=0.3
-        )
-        
-        memory = ConversationBufferMemory(
-            memory_key='chat_history',
-            return_messages=True
-        )
-        
-        conversation_chain = ConversationalRetrievalChain.from_llm(
-            llm=llm,
-            retriever=vectorstore.as_retriever(search_kwargs={"k": 3}),
-            memory=memory
-        )
-        return conversation_chain
-    except Exception as e:
-        st.error(f"Error creating conversation chain: {str(e)}")
-        return None
-
-def handle_user_input(user_question):
-    """Handle user question"""
-    if st.session_state.conversation is None:
-        st.warning("Please upload and process PDF files first.")
-        return
+def search_in_text(text, query):
+    """Simple search function (without AI)"""
+    if not text:
+        return "No text available to search."
     
-    try:
-        with st.spinner("Thinking..."):
-            response = st.session_state.conversation.invoke({"question": user_question})
+    text_lower = text.lower()
+    query_lower = query.lower()
+    
+    if query_lower in text_lower:
+        # Find context around the query
+        words = text.split()
+        found_contexts = []
         
-        # Display user question
-        st.markdown(f"""
-        <div class="user-message">
-            <strong>You:</strong><br>{user_question}
-        </div>
-        """, unsafe_allow_html=True)
+        for i, word in enumerate(words):
+            if query_lower in word.lower():
+                start = max(0, i - 20)
+                end = min(len(words), i + 20)
+                context = " ".join(words[start:end])
+                found_contexts.append("..." + context + "...")
+                
+                if len(found_contexts) >= 3:
+                    break
         
-        # Display bot response
-        st.markdown(f"""
-        <div class="bot-message">
-            <strong>DocuBot:</strong><br>{response['answer']}
-        </div>
-        """, unsafe_allow_html=True)
-        
-    except Exception as e:
-        st.error(f"Error: {str(e)}")
+        if found_contexts:
+            return "\n\n".join(found_contexts)
+        else:
+            return "Found the query in the document, but couldn't extract context."
+    else:
+        return "The query was not found in any of the uploaded documents."
 
 def main():
-    # Check API key
+    # Check for API key (optional for this simple version)
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
-        st.error("""
-        Google API Key Not Found!
-        
-        Please add your API key to Streamlit Cloud secrets or create a .env file.
-        
-        Get your API key from: https://makersuite.google.com/app/apikey
-        """)
-        return
+        st.info("Note: Add your Google API key to .env file for AI-powered responses. Using basic search for now.")
     
     # Initialize session state
-    if "conversation" not in st.session_state:
-        st.session_state.conversation = None
+    if "processed_text" not in st.session_state:
+        st.session_state.processed_text = ""
     if "processed" not in st.session_state:
         st.session_state.processed = False
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
     
     # Header
     st.markdown("""
     <div class="main-header">
         <h1>PDF DocuBot</h1>
-        <p>Chat with your PDF documents using AI</p>
+        <p>Chat with your PDF documents</p>
         <p>BY MR PRATIK</p>
     </div>
     """, unsafe_allow_html=True)
@@ -202,7 +153,7 @@ def main():
     # Main content area
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.info("**Ask questions about your PDFs and get instant answers!**")
+        st.info("**Ask questions about your PDFs and get answers!**")
         st.markdown("Upload documents, process them, and start chatting.")
     
     # Chat interface
@@ -210,14 +161,42 @@ def main():
     st.subheader("Chat with Your Documents")
     st.markdown("---")
     
+    # Display chat history
+    for message in st.session_state.chat_history:
+        if message["role"] == "user":
+            st.markdown(f"""
+            <div class="user-message">
+                <strong>You:</strong><br>{message["content"]}
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown(f"""
+            <div class="bot-message">
+                <strong>DocuBot:</strong><br>{message["content"]}
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Question input
     user_question = st.text_input(
         "Ask a question:",
-        placeholder="e.g., What is the main topic of these documents?",
-        disabled=not st.session_state.processed
+        placeholder="e.g., What is this document about?",
+        disabled=not st.session_state.processed,
+        key="question_input"
     )
     
     if user_question and st.session_state.processed:
-        handle_user_input(user_question)
+        # Add user question to chat
+        st.session_state.chat_history.append({"role": "user", "content": user_question})
+        
+        # Get answer
+        with st.spinner("Searching..."):
+            answer = search_in_text(st.session_state.processed_text, user_question)
+        
+        # Add bot response to chat
+        st.session_state.chat_history.append({"role": "assistant", "content": answer})
+        
+        # Rerun to update display
+        st.rerun()
     
     # Sidebar
     with st.sidebar:
@@ -237,27 +216,24 @@ def main():
             else:
                 with st.spinner("Processing PDFs..."):
                     try:
-                        # Extract text
-                        raw_text = get_pdf_text(pdf_docs)
+                        all_text = ""
+                        for pdf in pdf_docs:
+                            text = extract_text_from_pdf(pdf)
+                            if text:
+                                all_text += f"\n\n--- {pdf.name} ---\n\n{text}"
                         
-                        if not raw_text.strip():
+                        if not all_text.strip():
                             st.error("No text could be extracted from the PDFs.")
                         else:
-                            # Create chunks
-                            text_chunks = get_text_chunks(raw_text)
-                            st.info(f"Created {len(text_chunks)} text chunks")
+                            st.session_state.processed_text = all_text
+                            st.session_state.processed = True
+                            st.session_state.chat_history = []  # Clear chat history
+                            st.success(f"Successfully processed {len(pdf_docs)} PDF(s)!")
                             
-                            # Create vector store
-                            vectorstore = get_vectorstore(text_chunks)
+                            # Show preview
+                            with st.expander("Text Preview"):
+                                st.text(all_text[:1000] + "...")
                             
-                            if vectorstore:
-                                # Create conversation chain
-                                st.session_state.conversation = get_conversation_chain(vectorstore)
-                                st.session_state.processed = True
-                                st.success(f"Successfully processed {len(pdf_docs)} PDF(s)!")
-                            else:
-                                st.error("Failed to create vector store.")
-                                
                     except Exception as e:
                         st.error(f"Error: {str(e)}")
                         st.session_state.processed = False
@@ -283,16 +259,38 @@ def main():
         
         st.markdown("---")
         
+        # Features
+        st.markdown("### Features")
+        st.markdown("""
+        - PDF text extraction
+        - Keyword search
+        - Chat interface
+        - Multiple PDF support
+        """)
+        
+        st.markdown("---")
+        
         # Team
         st.markdown("### Team Members")
         st.markdown("**ANKIT SOME** - 24100124089")
         st.markdown("**SOURADIP GHOSH** - 24100124178")
         st.markdown("**PRATIK ACHARYA** - 24100124057")
+        
+        st.markdown("---")
+        
+        # Tips
+        st.markdown("### Tips")
+        st.markdown("""
+        - Ask specific questions
+        - Use keywords from your documents
+        - Upload clear, text-based PDFs
+        - For scanned PDFs, text extraction may be limited
+        """)
     
     # Footer
     st.markdown("""
     <div class="footer">
-        <p>Powered by Google Gemini AI | Made with Love by Team PDF DocuBot</p>
+        <p>Made with Love by Team PDF DocuBot</p>
     </div>
     """, unsafe_allow_html=True)
 
